@@ -1,19 +1,16 @@
-// Import Socket.IO client library
-import io from 'socket.io-client';
-
-// DOM elements
-const messagesContainer = document.querySelector('.chat-messages') as HTMLElement;
-const messageInput = document.getElementById('message-input') as HTMLInputElement;
-const sendButton = document.getElementById('send-button') as HTMLButtonElement;
-
-// Connect to the server
+// Connect to the server using Socket.IO
 const socket = io('https://adschat.michaelfoody.com/', {
-  transports: ['websocket'] // Ensure WebSocket is used
+  transports: ['websocket'] 
 });
 
+// DOM elements
+const messagesContainer = document.querySelector('.chat-messages');
+const messageInput = document.getElementById('message-input');
+const sendButton = document.getElementById('send-button');
+
 // Send message function
-const sendMessage = (message: string) => {
-  socket.emit('chat message', message); // Use 'chat message' event 
+const sendMessage = (message) => {
+  socket.emit('chat message', message); 
   messageInput.value = ''; 
 };
 

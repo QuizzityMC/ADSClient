@@ -1,5 +1,5 @@
 // WebSocket connection
-const socket = new WebSocket('wss://spacebar.chat/ws');
+const socket = new WebSocket('wss://adschat.michaelfoody.com/');
 
 // DOM elements
 const messagesContainer = document.querySelector('.chat-messages') as HTMLElement;

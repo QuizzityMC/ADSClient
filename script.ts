@@ -1,28 +1,31 @@
-// WebSocket connection
-const socket = new WebSocket('wss://adschat.michaelfoody.com/');
+// Import Socket.IO client library
+import io from 'socket.io-client';
 
 // DOM elements
 const messagesContainer = document.querySelector('.chat-messages') as HTMLElement;
 const messageInput = document.getElementById('message-input') as HTMLInputElement;
 const sendButton = document.getElementById('send-button') as HTMLButtonElement;
 
+// Connect to the server
+const socket = io('https://adschat.michaelfoody.com/', {
+  transports: ['websocket'] // Ensure WebSocket is used
+});
+
 // Send message function
 const sendMessage = (message: string) => {
-  const data = JSON.stringify({ message: message });
-  socket.send(data);
-  messageInput.value = ''; // Clear input field
+  socket.emit('chat message', message); // Use 'chat message' event 
+  messageInput.value = ''; 
 };
 
 // Handle message received
-socket.onmessage = (event) => {
-  const data = JSON.parse(event.data);
+socket.on('chat message', (message) => {
   const messageElement = document.createElement('div');
-  messageElement.classList.add('message', 'other'); // 'other' for messages from the server
-  messageElement.textContent = data.message;
+  messageElement.classList.add('message', 'other');
+  messageElement.textContent = message;
   messagesContainer.appendChild(messageElement);
-};
+});
 
-// Event listeners for sending messages
+// Event listeners
 sendButton.addEventListener('click', () => {
   const message = messageInput.value;
   if (message.trim() !== '') {
@@ -35,6 +38,3 @@ messageInput.addEventListener('keyup', (event) => {
     sendMessage(messageInput.value);
   }
 });
-
-// (Optional) Scroll to the bottom when new messages arrive
-messagesContainer.scrollTop = messagesContainer.scrollHeight; 
